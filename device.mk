@@ -186,9 +186,9 @@ PRODUCT_PACKAGES += \
     gps.msm8974 \
     flp.msm8974
 
-# OmniTorch
-PRODUCT_PACKAGES += \
-  OmniTorch
+# OmniTorch
+PRODUCT_PACKAGES += \
+    OmniTorch
 
 # NFC packages
 PRODUCT_PACKAGES += \
