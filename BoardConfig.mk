@@ -89,7 +89,6 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_UI_LIB := librecovery_ui_hammerhead
 TARGET_RECOVERY_FSTAB = device/lge/hammerhead/fstab.hammerhead
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 
 # Define kernel config for inline building
 TARGET_KERNEL_CONFIG := hammerhead_defconfig
@@ -119,5 +118,10 @@ TARGET_TOUCHBOOST_FREQUENCY:= 1200
 
 # Flags
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
+
+# Recovery
+RECOVERY_FSTAB_VERSION := 2
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 
 -include vendor/lge/hammerhead/BoardConfigVendor.mk
