@@ -97,10 +97,11 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_UI_LIB := librecovery_ui_hammerhead
 TARGET_RECOVERY_FSTAB = device/lge/hammerhead/fstab.hammerhead
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 
 # Define kernel config for inline building
-TARGET_KERNEL_CONFIG := hammerhead_defconfig
 TARGET_KERNEL_SOURCE := kernel/lge/hammerhead
+TARGET_KERNEL_CONFIG := slim_hammerhead_defconfig
 
 TARGET_RELEASETOOLS_EXTENSIONS := device/lge/hammerhead
 
