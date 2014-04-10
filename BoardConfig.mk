@@ -116,6 +116,7 @@ BOARD_SEPOLICY_DIRS := \
 BOARD_SEPOLICY_UNION := \
        device.te \
        app.te \
+       netd.te \
        file_contexts
 
 HAVE_ADRENO_SOURCE:= false
