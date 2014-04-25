@@ -135,6 +135,9 @@ RECOVERY_FSTAB_VERSION := 2
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 
+# Workaround for broken video recording when compiling thumb with -Os on FLO and HH
+AN_ASSHAT_HAS_BROKEN_MY_CAMERA_SOURCE := true
+
 -include vendor/lge/hammerhead/BoardConfigVendor.mk
 
 #TWRP
