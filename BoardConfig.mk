@@ -139,6 +139,9 @@ AN_ASSHAT_HAS_BROKEN_MY_CAMERA_SOURCE := true
 # compile with qcom proprietary static libraries
 WITH_QC_PERF := true
 
+# Hardware
+BOARD_HARDWARE_CLASS := device/lge/hammerhead/cmhw
+
 -include vendor/lge/hammerhead/BoardConfigVendor.mk
 
 #TWRP
