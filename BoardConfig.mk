@@ -137,6 +137,8 @@ BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 
 # Workaround for broken video recording when compiling thumb with -Os on FLO and HH
 AN_ASSHAT_HAS_BROKEN_MY_CAMERA_SOURCE := true
+# compile with qcom proprietary static libraries
+WITH_QC_PERF := true
 
 -include vendor/lge/hammerhead/BoardConfigVendor.mk
 
