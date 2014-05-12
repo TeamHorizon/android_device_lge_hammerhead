@@ -5,4 +5,11 @@
     "target_path": "kernel/lge/hammerhead",
     "revision": "kitkat"
   }
+i  {
+    "remote": "aosp",
+    "repository": "platform/device/lge/hammerhead-kernel",
+    "target_path": "device/lge/hammerhead-kernel",
+    "revision": "android-4.4.2_r2"
+  }
+
 ]
