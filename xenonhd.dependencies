@@ -3,11 +3,11 @@
     "remote": "cm",
     "repository": "android_kernel_lge_hammerhead",
     "target_path": "kernel/lge/hammerhead",
-    "revision": "cm-12.0"
+    "revision": "cm-12.1"
   },
   { "remote": "th",
     "repository": "vendor_lge",
     "target_path": "vendor/lge",
-    "revision": "lollipop"
+    "revision": "lp-mr1"
   }
 ]
