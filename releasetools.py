@@ -1,5 +1,50 @@
+# Copyright (C) 2014 The CyanogenMod Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import common
 import struct
+import re
+import os
+
+TARGET_DIR = os.getenv('OUT')
+
+def FullOTA_Assertions(info):
+  AddBootloaderAssertion(info, info.input_zip)
+
+
+def IncrementalOTA_Assertions(info):
+  AddBootloaderAssertion(info, info.target_zip)
+
+
+def AddBootloaderAssertion(info, input_zip):
+  if FindBootloader(input_zip):
+    return
+  android_info = input_zip.read("OTA/android-info.txt")
+  m = re.search(r"require\s+version-bootloader\s*=\s*(\S+)", android_info)
+  if m:
+    bootloaders = m.group(1).split("|")
+    if "*" not in bootloaders:
+      info.script.AssertSomeBootloader(*bootloaders)
+    info.metadata["pre-bootloader"] = m.group(1)
+
+
+def FindBootloader(zipfile):
+  try:
+    return zipfile.read("RADIO/bootloader.img")
+  except KeyError:
+    return None
+
 
 def FindRadio(zipfile):
   try:
@@ -108,8 +153,7 @@ def WriteRadio(info, radio_img):
   info.script.Print("Writing radio...")
   common.ZipWriteStr(info.output_zip, "radio.img", radio_img)
   _, device = common.GetTypeAndDevice("/radio", info.info_dict)
-  info.script.AppendExtra(
-      'package_extract_file("radio.img", "%s");' % (device,))
+  WriteImageAssert(info, "radio.img", radio_img, device)
 
 
 # /* msm8974 bootloader.img format */
@@ -194,8 +238,8 @@ def WriteBootloader(info, bootloader):
     common.ZipWriteStr(info.output_zip, "bootloader.%s.img" % (i,),
                        bootloader[imgs[i][0]:imgs[i][0]+imgs[i][1]])
 
-    info.script.AppendExtra('package_extract_file("bootloader.%s.img", "%s");' %
-                            (i, device))
+    WriteImageAssert(info, "bootloader.%s.img" % (i,),
+            bootloader[imgs[i][0]:imgs[i][0]+imgs[i][1]], device)
 
   info.script.AppendExtra(
       'package_extract_file("bootloader-flag-clear.txt", "%s");' %
@@ -204,8 +248,8 @@ def WriteBootloader(info, bootloader):
   try:
     for i in backup_partitions.split():
       _, device = common.GetTypeAndDevice("/"+i+"b", info.info_dict)
-      info.script.AppendExtra(
-          'package_extract_file("bootloader.%s.img", "%s");' % (i, device))
+      WriteImageAssert(info, "bootloader.%s.img" % (i,),
+              bootloader[imgs[i][0]:imgs[i][0]+imgs[i][1]], device)
   except KeyError:
     pass
 
@@ -215,3 +259,12 @@ def trunc_to_null(s):
     return s[:s.index('\0')]
   else:
     return s
+
+
+def WriteImageAssert(info, file_name, file_data, partition):
+  checksum = common.sha1(file_data).hexdigest()
+  file_size = len(file_data)
+  info.script.AppendExtra('ifelse((sha1_check(read_file("EMMC:%s:%d:%s")) != ""),'
+          '(ui_print("%s already up to date")),'
+          '(package_extract_file("%s", "%s")));'
+          % (partition, file_size, checksum, partition, file_name, partition))

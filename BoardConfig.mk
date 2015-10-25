@@ -19,14 +19,16 @@ TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 
 TARGET_NO_BOOTLOADER := true
 
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=hammerhead user_debug=31 maxcpus=2 msm_watchdog_v2.enable=1
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=hammerhead user_debug=31 maxcpus=2 msm_watchdog_v2.enable=1 androidboot.bootdevice=msm_sdcc.1
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02900000 --tags_offset 0x02700000
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 
 TARGET_KERNEL_CONFIG := hammerhead_defconfig
 TARGET_KERNEL_SOURCE := kernel/msm
@@ -73,8 +75,6 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
 TARGET_NO_RPC := true
 
-BOARD_EGL_CFG := device/lge/hammerhead/egl.cfg
-
 USE_OPENGL_RENDERER := true
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
@@ -99,11 +99,6 @@ BOARD_CACHEIMAGE_PARTITION_SIZE := 734003200
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-
-ifneq ($(filter hammerhead_fp aosp_hammerhead_fp,$(TARGET_PRODUCT)),)
-BOARD_HAS_FINGERPRINT_FPC := true
-endif
-
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
 TARGET_RECOVERY_FSTAB = device/lge/hammerhead/fstab.hammerhead
@@ -114,30 +109,29 @@ BOARD_HAL_STATIC_LIBRARIES := libdumpstate.hammerhead
 
 BOARD_SEPOLICY_DIRS += device/lge/hammerhead/sepolicy
 
-ifneq ($(filter hammerhead_fp aosp_hammerhead_fp,$(TARGET_PRODUCT)),)
-BOARD_SEPOLICY_DIRS += \
-       device/lge/hammerhead/sepolicy-hammerhead_fp
-
-# The list below is order dependent
-BOARD_SEPOLICY_UNION += \
-       device.te \
-       system_server.te \
-       file_contexts
-endif
+# Define kernel config for inline building
+TARGET_KERNEL_CONFIG := cyanogenmod_hammerhead_defconfig
+TARGET_KERNEL_SOURCE := kernel/lge/hammerhead
 
 HAVE_ADRENO_SOURCE:= false
 
 OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
-TARGET_TOUCHBOOST_FREQUENCY:= 1200
+# QCOM PowerHAL
+TARGET_POWERHAL_VARIANT := qcom
+TARGET_POWERHAL_SET_INTERACTIVE_EXT := device/lge/hammerhead/power/power_ext.c
 
 USE_DEVICE_SPECIFIC_QCOM_PROPRIETARY:= true
 USE_DEVICE_SPECIFIC_CAMERA:= true
 
-ifeq ($(USE_SVELTE_KERNEL),true)
-MALLOC_IMPL := dlmalloc
-endif
+# Recovery
+RECOVERY_FSTAB_VERSION := 2
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+
+# Hardware
+BOARD_HARDWARE_CLASS := device/lge/hammerhead/cmhw
 
 -include vendor/lge/hammerhead/BoardConfigVendor.mk
 
