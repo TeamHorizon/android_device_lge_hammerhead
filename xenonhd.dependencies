@@ -1,13 +1,13 @@
 [
   {
-    "remote": "aosp",
-    "repository": "kernel/msm",
-    "target_path": "kernel/msm",
-    "revision": "android-msm-hammerhead-3.4-marshmallow"
-  },
     "remote": "th",
-    "repository": "xe_prop_vendor",
-    "target_path": "vendor",
+    "repository": "android_kernel_lge_hammerhead",
+    "target_path": "kernel/lge/hammerhead",
+    "revision": "cm-13.0"
+  },
+  { "remote": "th",
+    "repository": "vendor_lge",
+    "target_path": "vendor/lge",
     "revision": "mm"
   }
 ]
